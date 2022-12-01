@@ -27,9 +27,6 @@ splitOn a = splitWhen (== a)
 splitOnNewline :: String -> [String]
 splitOnNewline = splitOn '\n'
 
-count :: (Foldable f, Functor f) => f a -> Int
-count = sum . fmap (const 1)
-
 requireAllJust :: [Maybe a] -> Maybe [a]
 requireAllJust [] = Just []
 requireAllJust (Nothing : _) = Nothing

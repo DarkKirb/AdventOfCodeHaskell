@@ -2,7 +2,7 @@ module AdventOfCode.Year2015.Day5 where
 
 import AdventOfCode.Fixture (runChallenge)
 import Data.List (isInfixOf)
-import Util (count, splitOnNewline)
+import Util (splitOnNewline)
 
 isVowel :: Char -> Bool
 isVowel 'a' = True
@@ -52,10 +52,10 @@ isNice2 :: String -> Bool
 isNice2 s = repeatTwoLetters s && repeatLetterTwoApart s
 
 part1 :: String -> Int
-part1 = count . filter isNice1 . splitOnNewline
+part1 = length . filter isNice1 . splitOnNewline
 
 part2 :: String -> Int
-part2 = count . filter isNice2 . splitOnNewline
+part2 = length . filter isNice2 . splitOnNewline
 
 run :: IO ()
 run = do
