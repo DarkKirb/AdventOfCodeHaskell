@@ -108,11 +108,10 @@ runInstruction (Toggle r) s = foldr toggleLight s (toPositions r)
 runInstructions :: [Instruction] -> HashSet Position -> HashSet Position
 runInstructions = flip $ foldr runInstruction
 
-part1 :: String -> Either ParseError Int
-part1 input = do
-  input' <- parseInput input
-  Right (HashSet.size $ runInstructions input' HashSet.empty)
+part1 :: [Instruction] -> Int
+part1 input = HashSet.size $ runInstructions input HashSet.empty
 
-run :: IO ()
-run = do
-  runChallenge 2015 6 1 part1
+run :: [String] -> IO ()
+run [] = mapM_ (\x -> run [x]) ["1"]
+run ("1" : _) = runChallenge 2015 6 1 parseInput part1
+run (part : _) = error $ "Unknown part: " ++ part

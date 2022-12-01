@@ -51,13 +51,17 @@ isNice1 s = containsThreeVowels 0 s && repeatedLetters s && noNaughtyStrings s
 isNice2 :: String -> Bool
 isNice2 s = repeatTwoLetters s && repeatLetterTwoApart s
 
-part1 :: String -> Int
-part1 = length . filter isNice1 . splitOnNewline
+parse :: String -> Either () [String]
+parse = Right . splitOnNewline
 
-part2 :: String -> Int
-part2 = length . filter isNice2 . splitOnNewline
+part1 :: [String] -> Int
+part1 = length . filter isNice1
 
-run :: IO ()
-run = do
-  runChallenge 2015 5 1 part1
-  runChallenge 2015 5 2 part2
+part2 :: [String] -> Int
+part2 = length . filter isNice2
+
+run :: [String] -> IO ()
+run [] = mapM_ (\x -> run [x]) ["1", "2"]
+run ("1" : _) = runChallenge 2015 5 1 parse part1
+run ("2" : _) = runChallenge 2015 5 2 parse part2
+run (part : _) = error $ "Unknown part: " ++ part

@@ -44,17 +44,14 @@ inputParser = many1 parseLine
 parseInput :: String -> Either ParseError [(Int, Int, Int)]
 parseInput = parse inputParser ""
 
-part1 :: String -> Either ParseError Int
-part1 input = do
-  input' <- parseInput input
-  Right ((sum . fmap (uncurry3 calcSurfaceArea)) input')
+part1 :: [(Int, Int, Int)] -> Int
+part1 = sum . fmap (uncurry3 calcSurfaceArea)
 
-part2 :: String -> Either ParseError Int
-part2 input = do
-  input' <- parseInput input
-  Right ((sum . fmap (uncurry3 calcRibbonLength)) input')
+part2 :: [(Int, Int, Int)] -> Int
+part2 = sum . fmap (uncurry3 calcRibbonLength)
 
-run :: IO ()
-run = do
-  runChallenge 2015 2 1 part1
-  runChallenge 2015 2 2 part2
+run :: [String] -> IO ()
+run [] = mapM_ (\x -> run [x]) ["1", "2"]
+run ("1" : _) = runChallenge 2015 2 1 parseInput part1
+run ("2" : _) = runChallenge 2015 2 2 parseInput part2
+run (part : _) = error $ "Unknown part: " ++ part

@@ -1,6 +1,6 @@
 module AdventOfCode.Year2015.Day3 where
 
-import AdventOfCode.Fixture (runChallenge)
+import AdventOfCode.Fixture (parseNOP, runChallenge)
 import Control.Monad.Trans.State (State, evalState, get, put)
 import Data.Set (Set)
 import qualified Data.Set as Set
@@ -56,7 +56,8 @@ part1 input = evalState (part1M input) startState1
 part2 :: String -> Int
 part2 input = evalState (part2M input) startState2
 
-run :: IO ()
-run = do
-  runChallenge 2015 3 1 part1
-  runChallenge 2015 3 2 part2
+run :: [String] -> IO ()
+run [] = mapM_ (\x -> run [x]) ["1", "2"]
+run ("1" : _) = runChallenge 2015 3 1 parseNOP part1
+run ("2" : _) = runChallenge 2015 3 2 parseNOP part2
+run (part : _) = error $ "Unknown part: " ++ part

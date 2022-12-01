@@ -1,6 +1,6 @@
 module AdventOfCode.Year2015.Day4 where
 
-import AdventOfCode.Fixture (runChallenge)
+import AdventOfCode.Fixture (parseNOP, runChallenge)
 import Crypto.Hash (Digest, MD5, hash)
 import Data.ByteString.UTF8 as BSU (ByteString, fromString)
 import Data.List (find)
@@ -29,7 +29,8 @@ part1 = fmap fst . find (\(_, c) -> leadingZeros c >= 5) . enumerate . genHashes
 part2 :: String -> Maybe Int
 part2 = fmap fst . find (\(_, c) -> leadingZeros c >= 6) . enumerate . genHashes
 
-run :: IO ()
-run = do
-  runChallenge 2015 4 1 part1
-  runChallenge 2015 4 2 part2
+run :: [String] -> IO ()
+run [] = mapM_ (\x -> run [x]) ["1", "2"]
+run ("1" : _) = runChallenge 2015 4 1 parseNOP part1
+run ("2" : _) = runChallenge 2015 4 2 parseNOP part2
+run (part : _) = error $ "Unknown part: " ++ part

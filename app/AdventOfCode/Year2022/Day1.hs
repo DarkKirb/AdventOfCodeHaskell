@@ -15,17 +15,14 @@ inputParser = (parseNumber `sepEndBy` char '\n') `sepBy1` char '\n'
 parseInput :: String -> Either ParseError [[Int]]
 parseInput = parse inputParser ""
 
-part1 :: String -> Either ParseError Int
-part1 input = do
-  input' <- parseInput input
-  Right $ maximum $ fmap sum input'
+part1 :: [[Int]] -> Int
+part1 = maximum . fmap sum
 
-part2 :: String -> Either ParseError Int
-part2 input = do
-  input' <- parseInput input
-  Right $ sum $ take 3 $ sortBy (flip compare) $ fmap sum input'
+part2 :: [[Int]] -> Int
+part2 = sum . take 3 . sortBy (flip compare) . fmap sum
 
-run :: IO ()
-run = do
-  runChallenge 2022 1 1 part1
-  runChallenge 2022 1 2 part2
+run :: [String] -> IO ()
+run [] = mapM_ (\x -> run [x]) ["1", "2"]
+run ("1" : _) = runChallenge 2022 1 1 parseInput part1
+run ("2" : _) = runChallenge 2022 1 2 parseInput part2
+run (part : _) = error $ "Unknown part: " ++ part
