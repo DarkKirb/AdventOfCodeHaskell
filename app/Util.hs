@@ -5,17 +5,10 @@ import Text.Parsec.Prim ((<?>))
 import Text.Parsec.String (Parser)
 
 enumerate :: [a] -> [(Int, a)]
-enumerate = enumerate' 0
-  where
-    enumerate' _ [] = []
-    enumerate' n (x : xs) = (n, x) : enumerate' (n + 1) xs
+enumerate = zip [0 ..]
 
 runningSum :: Num a => [a] -> [a]
-runningSum = runningSum' 0
-  where
-    runningSum' :: Num a => a -> [a] -> [a]
-    runningSum' _ [] = []
-    runningSum' n (x : xs) = n : runningSum' (n + x) xs
+runningSum = scanl (+) 0
 
 parseNumber :: Parser Int
 parseNumber = read <$> many1 digit <?> "number"
