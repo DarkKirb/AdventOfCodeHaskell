@@ -1,11 +1,12 @@
 module AdventOfCode.Year2015.Day6 where
 
 import AdventOfCode.Fixture (runChallenge)
+import Data.HashMap.Strict (HashMap)
+import qualified Data.HashMap.Strict as HashMap
 import Data.HashSet (HashSet)
 import qualified Data.HashSet as HashSet
 import Data.Hashable (Hashable (hashWithSalt))
-import Text.Parsec (char, parse, string, (<|>))
-import Text.Parsec.Combinator (many1)
+import Text.Parsec (char, parse, sepEndBy1, string, try, (<|>))
 import Text.Parsec.Error (ParseError)
 import Text.Parsec.Prim ((<?>))
 import Text.Parsec.String (Parser)
@@ -33,8 +34,8 @@ getMin (Rectangle (m, _)) = m
 getMax :: Rectangle -> Position
 getMax (Rectangle (_, m)) = m
 
-toPositions :: Rectangle -> [Position]
-toPositions r = concatMap (\x -> fmap (\y -> Position (x, y)) [getY $ getMin r .. getY $ getMax r]) [getX $ getMin r .. getX $ getMax r]
+toPositions :: Rectangle -> [[Position]]
+toPositions r = fmap (\x -> fmap (\y -> Position (x, y)) [getY $ getMin r .. getY $ getMax r]) [getX $ getMin r .. getX $ getMax r]
 
 data Instruction = TurnOn Rectangle | TurnOff Rectangle | Toggle Rectangle
   deriving (Eq, Show)
@@ -59,34 +60,24 @@ parseRectangle =
 
 parseTurnOff :: Parser Instruction
 parseTurnOff = do
-  _ <- string "ff "
+  _ <- string "turn off "
   TurnOff <$> parseRectangle
 
 parseTurnOn :: Parser Instruction
 parseTurnOn = do
-  _ <- string "n "
+  _ <- string "turn on "
   TurnOn <$> parseRectangle
-
-parseTurnO :: Parser Instruction
-parseTurnO = do
-  _ <- string "urn o"
-  parseTurnOff <|> parseTurnOn
 
 parseToggle :: Parser Instruction
 parseToggle = do
-  _ <- string "oggle "
+  _ <- string "toggle "
   Toggle <$> parseRectangle
 
 parseInstruction :: Parser Instruction
-parseInstruction = do
-  _ <- char 't'
-  parseTurnO <|> parseToggle <?> "Instruction"
-
-parseLine :: Parser Instruction
-parseLine = parseInstruction >>= \ins -> char '\n' >> return ins
+parseInstruction = try parseTurnOn <|> try parseTurnOff <|> parseToggle
 
 parseLines :: Parser [Instruction]
-parseLines = many1 parseLine
+parseLines = parseInstruction `sepEndBy1` char '\n'
 
 parseInput :: String -> Either ParseError [Instruction]
 parseInput = parse parseLines ""
@@ -94,24 +85,45 @@ parseInput = parse parseLines ""
 turnOffLight :: Position -> HashSet Position -> HashSet Position
 turnOffLight = HashSet.delete
 
+turnOffLight' :: Position -> HashMap Position Int -> HashMap Position Int
+turnOffLight' = HashMap.update (\i -> if i <= 1 then Nothing else Just (i - 1))
+
 turnOnLight :: Position -> HashSet Position -> HashSet Position
 turnOnLight = HashSet.insert
+
+turnOnLight' :: Position -> HashMap Position Int -> HashMap Position Int
+turnOnLight' = HashMap.alter (Just . maybe 1 (+ 1))
 
 toggleLight :: Position -> HashSet Position -> HashSet Position
 toggleLight p s = if HashSet.member p s then turnOffLight p s else turnOnLight p s
 
+toggleLight' :: Position -> HashMap Position Int -> HashMap Position Int
+toggleLight' = HashMap.alter (Just . maybe 2 (+ 2))
+
 runInstruction :: Instruction -> HashSet Position -> HashSet Position
-runInstruction (TurnOn r) s = foldr turnOnLight s (toPositions r)
-runInstruction (TurnOff r) s = foldr turnOffLight s (toPositions r)
-runInstruction (Toggle r) s = foldr toggleLight s (toPositions r)
+runInstruction (TurnOn r) s = foldr (flip $ foldr turnOnLight) s $ toPositions r
+runInstruction (TurnOff r) s = foldr (flip $ foldr turnOffLight) s $ toPositions r
+runInstruction (Toggle r) s = foldr (flip $ foldr toggleLight) s $ toPositions r
+
+runInstruction' :: Instruction -> HashMap Position Int -> HashMap Position Int
+runInstruction' (TurnOn r) s = foldr (flip $ foldr turnOnLight') s $ toPositions r
+runInstruction' (TurnOff r) s = foldr (flip $ foldr turnOffLight') s $ toPositions r
+runInstruction' (Toggle r) s = foldr (flip $ foldr toggleLight') s $ toPositions r
 
 runInstructions :: [Instruction] -> HashSet Position -> HashSet Position
-runInstructions = flip $ foldr runInstruction
+runInstructions = flip $ foldl (flip runInstruction)
+
+runInstructions' :: [Instruction] -> HashMap Position Int -> HashMap Position Int
+runInstructions' = flip $ foldl (flip runInstruction')
 
 part1 :: [Instruction] -> Int
 part1 input = HashSet.size $ runInstructions input HashSet.empty
 
+part2 :: [Instruction] -> Int
+part2 input = sum $ runInstructions' input HashMap.empty
+
 run :: [String] -> IO ()
-run [] = mapM_ (\x -> run [x]) ["1"]
+run [] = mapM_ (\x -> run [x]) ["1", "2"]
 run ("1" : _) = runChallenge 2015 6 1 parseInput part1
+run ("2" : _) = runChallenge 2015 6 2 parseInput part2
 run (part : _) = error $ "Unknown part: " ++ part
