@@ -51,7 +51,7 @@ extra-doc-files:    CHANGELOG.md
 -- extra-source-files:
 
 common warnings
-    ghc-options: -Wall
+    ghc-options: -Wall -Wno-unused-do-bind
 
 executable AdventOfCode
     -- Import common warning flags.
@@ -67,8 +67,10 @@ executable AdventOfCode
                     AdventOfCode.Year2015.Day4,
                     AdventOfCode.Year2015.Day5,
                     AdventOfCode.Year2015.Day6,
+                    AdventOfCode.Year2015.Day7,
                     AdventOfCode.Year2022.Day1,
                     AdventOfCode.Year2022.Day2,
+                    AdventOfCode.Year2022.Day3,
                     AdventOfCode.Fixture,
                     AdventOfCode.Year2015,
                     AdventOfCode.Year2022,
@@ -94,4 +96,4 @@ executable AdventOfCode
     -- Base language which the package is written in.
     default-language: Haskell2010
 
-    default-extensions: InstanceSigs
+    default-extensions: InstanceSigs, DeriveAnyClass, DeriveGeneric
