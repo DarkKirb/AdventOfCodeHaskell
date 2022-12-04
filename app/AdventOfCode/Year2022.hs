@@ -3,6 +3,7 @@ module AdventOfCode.Year2022 where
 import qualified AdventOfCode.Year2022.Day1 as Day1
 import qualified AdventOfCode.Year2022.Day2 as Day2
 import qualified AdventOfCode.Year2022.Day3 as Day3
+import qualified AdventOfCode.Year2022.Day4 as Day4
 
 run :: [String] -> IO ()
 run [] =
@@ -10,9 +11,11 @@ run [] =
     (\x -> run [x])
     [ "1",
       "2",
-      "3"
+      "3",
+      "4"
     ]
 run ("1" : xs) = Day1.run xs
 run ("2" : xs) = Day2.run xs
 run ("3" : xs) = Day3.run xs
+run ("4" : xs) = Day4.run xs
 run (day : _) = error $ "Unknown day: " ++ day

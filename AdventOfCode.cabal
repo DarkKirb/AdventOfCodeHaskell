@@ -71,6 +71,7 @@ executable AdventOfCode
                     AdventOfCode.Year2022.Day1,
                     AdventOfCode.Year2022.Day2,
                     AdventOfCode.Year2022.Day3,
+                    AdventOfCode.Year2022.Day4,
                     AdventOfCode.Fixture,
                     AdventOfCode.Year2015,
                     AdventOfCode.Year2022,
