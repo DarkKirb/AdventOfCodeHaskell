@@ -86,3 +86,7 @@ findCommonElement a b = safeHead $ findCommonElements a b
 
 findCommonElementL :: Ord a => [[a]] -> Maybe a
 findCommonElementL = safeHead . findCommonElementsL
+
+applyN :: Int -> (a -> a) -> a -> a
+applyN 0 _ s = s
+applyN n f s = applyN (n - 1) f $ f s
