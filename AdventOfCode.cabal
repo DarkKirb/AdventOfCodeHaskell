@@ -73,6 +73,7 @@ executable AdventOfCode
                     AdventOfCode.Year2022.Day3,
                     AdventOfCode.Year2022.Day4,
                     AdventOfCode.Year2022.Day5,
+                    AdventOfCode.Year2022.Day6,
                     AdventOfCode.Fixture,
                     AdventOfCode.Year2015,
                     AdventOfCode.Year2022,
@@ -99,4 +100,4 @@ executable AdventOfCode
     -- Base language which the package is written in.
     default-language: Haskell2010
 
-    default-extensions: InstanceSigs, DeriveAnyClass, DeriveGeneric
+    default-extensions: InstanceSigs, DeriveAnyClass, DeriveGeneric, TupleSections

@@ -90,3 +90,17 @@ findCommonElementL = safeHead . findCommonElementsL
 applyN :: Int -> (a -> a) -> a -> a
 applyN 0 _ s = s
 applyN n f s = applyN (n - 1) f $ f s
+
+allBinaryPairs :: [a] -> [(a, a)]
+allBinaryPairs (x : xs) = fmap (x,) xs ++ allBinaryPairs xs
+allBinaryPairs [] = []
+
+permReduce :: [a] -> (a -> a -> b) -> (b -> b -> b) -> b -> b
+permReduce xs f1 f2 f2nil = foldr f2 f2nil (fmap (uncurry f1) (allBinaryPairs xs))
+
+slidingWindow :: Int -> [a] -> [[a]]
+slidingWindow n xs
+  | length xs < n = []
+  | otherwise =
+      let (front, _) = splitAt n xs
+       in front : slidingWindow n (tail xs)
