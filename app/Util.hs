@@ -104,3 +104,10 @@ slidingWindow n xs
   | otherwise =
       let (front, _) = splitAt n xs
        in front : slidingWindow n (tail xs)
+
+safeTail :: [a] -> Maybe [a]
+safeTail [] = Nothing
+safeTail (_ : xs) = Just xs
+
+(<.>) :: Functor f => (a -> b) -> (c -> a) -> f c -> f b
+f <.> g = fmap (f . g)
