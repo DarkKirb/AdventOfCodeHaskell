@@ -8,6 +8,7 @@ import qualified AdventOfCode.Year2022.Day5 as Day5
 import qualified AdventOfCode.Year2022.Day6 as Day6
 import qualified AdventOfCode.Year2022.Day7 as Day7
 import qualified AdventOfCode.Year2022.Day8 as Day8
+import qualified AdventOfCode.Year2022.Day9 as Day9
 
 run :: [String] -> IO ()
 run [] =
@@ -20,7 +21,8 @@ run [] =
       "5",
       "6",
       "7",
-      "8"
+      "8",
+      "9"
     ]
 run ("1" : xs) = Day1.run xs
 run ("2" : xs) = Day2.run xs
@@ -30,4 +32,5 @@ run ("5" : xs) = Day5.run xs
 run ("6" : xs) = Day6.run xs
 run ("7" : xs) = Day7.run xs
 run ("8" : xs) = Day8.run xs
+run ("9" : xs) = Day9.run xs
 run (day : _) = error $ "Unknown day: " ++ day
