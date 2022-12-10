@@ -1,7 +1,8 @@
 module Util where
 
 import Data.List (sort)
-import Text.Parsec (digit, many1)
+import Text.Parsec (digit, many1, option)
+import Text.Parsec.Char (char)
 import Text.Parsec.Prim ((<?>))
 import Text.Parsec.String (Parser)
 
@@ -13,6 +14,12 @@ runningSum = scanl (+) 0
 
 parseNumber :: Parser Int
 parseNumber = read <$> many1 digit <?> "number"
+
+parseSNumber :: Parser Int
+parseSNumber = do
+  sign <- option 1 (char '-' >> return (-1))
+  number <- parseNumber
+  return $ sign * number
 
 splitWhenI :: (Int -> a -> Bool) -> [a] -> [[a]]
 splitWhenI = splitWhenI' 0
@@ -90,6 +97,12 @@ findCommonElementL = safeHead . findCommonElementsL
 applyN :: Int -> (a -> a) -> a -> a
 applyN 0 _ s = s
 applyN n f s = applyN (n - 1) f $ f s
+
+applyN' :: Int -> (a -> a) -> a -> [a]
+applyN' 0 _ s = [s]
+applyN' n f s =
+  let next = f s
+   in next : applyN' (n - 1) f next
 
 allBinaryPairs :: [a] -> [(a, a)]
 allBinaryPairs (x : xs) = fmap (x,) xs ++ allBinaryPairs xs
