@@ -78,6 +78,7 @@ executable AdventOfCode
                     AdventOfCode.Year2022.Day8,
                     AdventOfCode.Year2022.Day9,
                     AdventOfCode.Year2022.Day10,
+                    AdventOfCode.Year2022.Day11,
                     AdventOfCode.Fixture,
                     AdventOfCode.Year2015,
                     AdventOfCode.Year2022,
@@ -97,7 +98,8 @@ executable AdventOfCode
                       unordered-containers,
                       hashable,
                       vector,
-                      linear
+                      linear,
+                      lens
 
     -- Directories containing source files.
     hs-source-dirs:   app
@@ -105,4 +107,5 @@ executable AdventOfCode
     -- Base language which the package is written in.
     default-language: Haskell2010
 
-    default-extensions: InstanceSigs, DeriveAnyClass, DeriveGeneric, TupleSections, NamedFieldPuns
+    default-extensions: InstanceSigs, DeriveAnyClass, DeriveGeneric, TupleSections, NamedFieldPuns,
+        TemplateHaskell

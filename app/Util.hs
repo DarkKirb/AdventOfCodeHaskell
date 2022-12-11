@@ -98,6 +98,10 @@ applyN :: Int -> (a -> a) -> a -> a
 applyN 0 _ s = s
 applyN n f s = applyN (n - 1) f $ f s
 
+applyNM :: Monad m => Int -> m () -> m ()
+applyNM 0 m = m
+applyNM n m = m >> applyNM (n - 1) m
+
 applyN' :: Int -> (a -> a) -> a -> [a]
 applyN' 0 _ s = [s]
 applyN' n f s =
