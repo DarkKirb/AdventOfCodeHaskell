@@ -79,6 +79,7 @@ executable AdventOfCode
                     AdventOfCode.Year2022.Day9,
                     AdventOfCode.Year2022.Day10,
                     AdventOfCode.Year2022.Day11,
+                    AdventOfCode.Year2022.Day12,
                     AdventOfCode.Fixture,
                     AdventOfCode.Year2015,
                     AdventOfCode.Year2022,
@@ -99,7 +100,8 @@ executable AdventOfCode
                       hashable,
                       vector,
                       linear,
-                      lens
+                      lens,
+                      search-algorithms
 
     -- Directories containing source files.
     hs-source-dirs:   app
