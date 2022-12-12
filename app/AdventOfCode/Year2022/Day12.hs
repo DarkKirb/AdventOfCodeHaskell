@@ -10,7 +10,7 @@ import Data.Vector (Vector, (!?))
 import qualified Data.Vector as V
 import Linear (V2)
 import Linear.V2 (V2 (..))
-import Util (enumerate, safeHead, splitOnNewline)
+import Util (enumerate, splitOnNewline)
 
 type HeightMap = Vector (Vector Int)
 
@@ -48,12 +48,7 @@ reverseTuple (a, b) = (b, a)
 
 findStartPosition :: HeightMap -> Maybe (V2 Int)
 findStartPosition hm =
-  let hmList = V.toList hm
-      processRow :: Int -> Vector Int -> Maybe (V2 Int)
-      processRow x row =
-        let rowList = V.toList row
-         in (fst <$> find (\(_, e) -> e == (-1)) (first (V2 x) <$> enumerate rowList))
-   in safeHead $ mapMaybe (uncurry processRow) (enumerate hmList)
+  find (\p -> hm !# p == Just (-1)) $ allStartPositions hm
 
 allStartPositions :: HeightMap -> [V2 Int]
 allStartPositions hm =
