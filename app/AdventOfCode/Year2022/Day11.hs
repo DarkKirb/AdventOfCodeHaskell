@@ -10,8 +10,7 @@ import Control.Monad.Trans.State (State, evalState, get)
 import Data.List (sortBy)
 import Data.Sequence (Seq ((:<|)), (|>))
 import qualified Data.Sequence as Seq
-import Text.Parsec (char, sepEndBy1, string)
-import Text.Parsec.Combinator (sepBy1)
+import Text.Parsec (char, sepBy, sepEndBy1, string)
 import Text.Parsec.Error (ParseError)
 import Text.Parsec.Prim (parse)
 import Text.Parsec.String (Parser)
@@ -65,7 +64,7 @@ expressionParser = do
     _ -> error "Invalid state"
 
 commaSeparatedList :: Parser a -> Parser [a]
-commaSeparatedList p = p `sepBy1` (char ',' >> many (char ' '))
+commaSeparatedList p = p `sepBy` (char ',' >> many (char ' '))
 
 monkeyParser :: Parser Monkey
 monkeyParser = do

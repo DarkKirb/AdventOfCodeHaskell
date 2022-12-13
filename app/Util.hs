@@ -128,3 +128,7 @@ safeTail (_ : xs) = Just xs
 
 (<.>) :: Functor f => (a -> b) -> (c -> a) -> f c -> f b
 f <.> g = fmap (f . g)
+
+unzipMerge :: [(a, a)] -> [a]
+unzipMerge [] = []
+unzipMerge ((a, b) : xs) = a : b : unzipMerge xs
