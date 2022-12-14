@@ -24,31 +24,16 @@ step _ (V2 _ 200) = return $ Left True
 step fy (V2 x y) = do
   hs <- get
   let cantGoDown = hitsBlock fy (V2 x (y + 1)) hs
-  -- traceShowM (V2 x y, "d", cantGoDown)
-  ( if cantGoDown
-      then
-        ( do
-            let cantGoDownLeft = hitsBlock fy (V2 (x - 1) (y + 1)) hs
-            -- traceShowM (V2 x y, "dl", cantGoDownLeft)
-            ( if cantGoDownLeft
-                then
-                  ( do
-                      let cantGoDownRight = hitsBlock fy (V2 (x + 1) (y + 1)) hs
-                      -- traceShowM (V2 x y, "dr", cantGoDownRight)
-                      ( if cantGoDownRight
-                          then
-                            ( do
-                                put $ HS.insert (V2 x y) hs
-                                return $ Left False
-                            )
-                          else return $ Right (V2 (x + 1) (y + 1))
-                        )
-                  )
-                else return $ Right (V2 (x - 1) (y + 1))
-              )
-        )
-      else return $ Right (V2 x (y + 1))
-    )
+  let cantGoDownLeft = hitsBlock fy (V2 (x - 1) (y + 1)) hs
+  let cantGoDownRight = hitsBlock fy (V2 (x + 1) (y + 1)) hs
+
+  case (cantGoDown, cantGoDownLeft, cantGoDownRight) of
+    (False, _, _) -> return $ Right (V2 x (y + 1))
+    (_, False, _) -> return $ Right (V2 (x - 1) (y + 1))
+    (_, _, False) -> return $ Right (V2 (x + 1) (y + 1))
+    _ -> do
+      put $ HS.insert (V2 x y) hs
+      return $ Left False
 
 runSand :: Int -> V2 Int -> State StateType Bool
 runSand fy pos = do
