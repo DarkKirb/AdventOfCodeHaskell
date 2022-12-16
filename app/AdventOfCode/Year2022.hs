@@ -6,6 +6,7 @@ import qualified AdventOfCode.Year2022.Day11 as Day11
 import qualified AdventOfCode.Year2022.Day12 as Day12
 import qualified AdventOfCode.Year2022.Day13 as Day13
 import qualified AdventOfCode.Year2022.Day14 as Day14
+import qualified AdventOfCode.Year2022.Day15 as Day15
 import qualified AdventOfCode.Year2022.Day2 as Day2
 import qualified AdventOfCode.Year2022.Day3 as Day3
 import qualified AdventOfCode.Year2022.Day4 as Day4
@@ -32,7 +33,8 @@ run [] =
       "11",
       "12",
       "13",
-      "14"
+      "14",
+      "15"
     ]
 run ("1" : xs) = Day1.run xs
 run ("2" : xs) = Day2.run xs
@@ -48,4 +50,5 @@ run ("11" : xs) = Day11.run xs
 run ("12" : xs) = Day12.run xs
 run ("13" : xs) = Day13.run xs
 run ("14" : xs) = Day14.run xs
+run ("15" : xs) = Day15.run xs
 run (day : _) = error $ "Unknown day: " ++ day
